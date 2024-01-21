@@ -142,11 +142,11 @@ func (c *Client) parseRequest(r *request, opts ...RequestOption) (err error) {
 
 func (c *Client) callAPI(ctx context.Context, r *request, opts ...RequestOption) (data []byte, err error) {
 	err = c.parseRequest(r, opts...)
-	if r.endpoint != "/api/v3/order/cancelReplace" {
-		if err != nil {
-			return []byte{}, err
-		}
+	//if r.endpoint != "/fapi/v1/order/cancelReplace" {
+	if err != nil {
+		return []byte{}, err
 	}
+	//}
 	req, err := http.NewRequest(r.method, r.fullURL, r.body)
 	if err != nil {
 		return []byte{}, err
@@ -184,9 +184,9 @@ func (c *Client) callAPI(ctx context.Context, r *request, opts ...RequestOption)
 		if e != nil {
 			c.debug("failed to unmarshal json: %s", e)
 		}
-		if r.endpoint != "/api/v3/order/cancelReplace" {
-			return nil, apiErr
-		}
+		//if r.endpoint != "/api/v3/order/cancelReplace" {
+		return nil, apiErr
+		//}
 	}
 	return data, nil
 }
@@ -199,10 +199,10 @@ func newJSON(data []byte) (j *simplejson.Json, err error) {
 	return j, nil
 }
 
-// Account Endpoints:
-func (c *Client) NewTestNewOrder() *TestNewOrder {
-	return &TestNewOrder{c: c}
-}
+// // Account Endpoints:
+// func (c *Client) NewTestNewOrder() *TestNewOrder {
+// 	return &TestNewOrder{c: c}
+// }
 
 func (c *Client) NewCreateOrderService() *CreateOrderService {
 	return &CreateOrderService{c: c}

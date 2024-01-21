@@ -7,197 +7,199 @@ import (
 	"strconv"
 )
 
-// Binance Test New Order endpoint (POST /api/v3/order/test)
-type TestNewOrder struct {
-	c                   *Client
-	symbol              string
-	side                string
-	orderType           string
-	timeInForce         *string
-	quantity            *float64
-	quoteOrderQty       *float64
-	price               *float64
-	newClientOrderId    *string
-	strategyId          *int
-	strategyType        *int
-	stopPrice           *float64
-	trailingDelta       *int
-	icebergQty          *float64
-	newOrderRespType    *string
-	selfTradePrevention *string
-}
+// // Binance Test New Order endpoint (POST /api/v3/order/test)
+// type TestNewOrder struct {
+// 	c                   *Client
+// 	symbol              string
+// 	side                string
+// 	orderType           string
+// 	timeInForce         *string
+// 	quantity            *float64
+// 	quoteOrderQty       *float64
+// 	price               *float64
+// 	newClientOrderId    *string
+// 	strategyId          *int
+// 	strategyType        *int
+// 	stopPrice           *float64
+// 	trailingDelta       *int
+// 	icebergQty          *float64
+// 	newOrderRespType    *string
+// 	selfTradePrevention *string
+// }
 
-// Symbol set symbol
-func (s *TestNewOrder) Symbol(symbol string) *TestNewOrder {
-	s.symbol = symbol
-	return s
-}
+// // Symbol set symbol
+// func (s *TestNewOrder) Symbol(symbol string) *TestNewOrder {
+// 	s.symbol = symbol
+// 	return s
+// }
 
-// Side set side
-func (s *TestNewOrder) Side(side string) *TestNewOrder {
-	s.side = side
-	return s
-}
+// // Side set side
+// func (s *TestNewOrder) Side(side string) *TestNewOrder {
+// 	s.side = side
+// 	return s
+// }
 
-// OrderType set orderType
-func (s *TestNewOrder) OrderType(orderType string) *TestNewOrder {
-	s.orderType = orderType
-	return s
-}
+// // OrderType set orderType
+// func (s *TestNewOrder) OrderType(orderType string) *TestNewOrder {
+// 	s.orderType = orderType
+// 	return s
+// }
 
-// TimeInForce set timeInForce
-func (s *TestNewOrder) TimeInForce(timeInForce string) *TestNewOrder {
-	s.timeInForce = &timeInForce
-	return s
-}
+// // TimeInForce set timeInForce
+// func (s *TestNewOrder) TimeInForce(timeInForce string) *TestNewOrder {
+// 	s.timeInForce = &timeInForce
+// 	return s
+// }
 
-// Quantity set quantity
-func (s *TestNewOrder) Quantity(quantity float64) *TestNewOrder {
-	s.quantity = &quantity
-	return s
-}
+// // Quantity set quantity
+// func (s *TestNewOrder) Quantity(quantity float64) *TestNewOrder {
+// 	s.quantity = &quantity
+// 	return s
+// }
 
-// QuoteOrderQty set quoteOrderQty
-func (s *TestNewOrder) QuoteOrderQty(quoteOrderQty float64) *TestNewOrder {
-	s.quoteOrderQty = &quoteOrderQty
-	return s
-}
+// // QuoteOrderQty set quoteOrderQty
+// func (s *TestNewOrder) QuoteOrderQty(quoteOrderQty float64) *TestNewOrder {
+// 	s.quoteOrderQty = &quoteOrderQty
+// 	return s
+// }
 
-// Price set price
-func (s *TestNewOrder) Price(price float64) *TestNewOrder {
-	s.price = &price
-	return s
-}
+// // Price set price
+// func (s *TestNewOrder) Price(price float64) *TestNewOrder {
+// 	s.price = &price
+// 	return s
+// }
 
-// NewClientOrderId set newClientOrderId
-func (s *TestNewOrder) NewClientOrderId(newClientOrderId string) *TestNewOrder {
-	s.newClientOrderId = &newClientOrderId
-	return s
-}
+// // NewClientOrderId set newClientOrderId
+// func (s *TestNewOrder) NewClientOrderId(newClientOrderId string) *TestNewOrder {
+// 	s.newClientOrderId = &newClientOrderId
+// 	return s
+// }
 
-// StrategyId set strategyId
-func (s *TestNewOrder) StrategyId(strategyId int) *TestNewOrder {
-	s.strategyId = &strategyId
-	return s
-}
+// // StrategyId set strategyId
+// func (s *TestNewOrder) StrategyId(strategyId int) *TestNewOrder {
+// 	s.strategyId = &strategyId
+// 	return s
+// }
 
-// StrategyType set strategyType
-func (s *TestNewOrder) StrategyType(strategyType int) *TestNewOrder {
-	s.strategyType = &strategyType
-	return s
-}
+// // StrategyType set strategyType
+// func (s *TestNewOrder) StrategyType(strategyType int) *TestNewOrder {
+// 	s.strategyType = &strategyType
+// 	return s
+// }
 
-// StopPrice set stopPrice
-func (s *TestNewOrder) StopPrice(stopPrice float64) *TestNewOrder {
-	s.stopPrice = &stopPrice
-	return s
-}
+// // StopPrice set stopPrice
+// func (s *TestNewOrder) StopPrice(stopPrice float64) *TestNewOrder {
+// 	s.stopPrice = &stopPrice
+// 	return s
+// }
 
-// TrailingDelta set trailingDelta
-func (s *TestNewOrder) TrailingDelta(trailingDelta int) *TestNewOrder {
-	s.trailingDelta = &trailingDelta
-	return s
-}
+// // TrailingDelta set trailingDelta
+// func (s *TestNewOrder) TrailingDelta(trailingDelta int) *TestNewOrder {
+// 	s.trailingDelta = &trailingDelta
+// 	return s
+// }
 
-// IcebergQty set icebergQty
-func (s *TestNewOrder) IcebergQty(icebergQty float64) *TestNewOrder {
-	s.icebergQty = &icebergQty
-	return s
-}
+// // IcebergQty set icebergQty
+// func (s *TestNewOrder) IcebergQty(icebergQty float64) *TestNewOrder {
+// 	s.icebergQty = &icebergQty
+// 	return s
+// }
 
-// NewOrderRespType set newOrderRespType
-func (s *TestNewOrder) NewOrderRespType(newOrderRespType string) *TestNewOrder {
-	s.newOrderRespType = &newOrderRespType
-	return s
-}
+// // NewOrderRespType set newOrderRespType
+// func (s *TestNewOrder) NewOrderRespType(newOrderRespType string) *TestNewOrder {
+// 	s.newOrderRespType = &newOrderRespType
+// 	return s
+// }
 
-// SelfTradePrevention set selfTradePrevention
-func (s *TestNewOrder) SelfTradePrevention(selfTradePrevention string) *TestNewOrder {
-	s.selfTradePrevention = &selfTradePrevention
-	return s
-}
+// // SelfTradePrevention set selfTradePrevention
+// func (s *TestNewOrder) SelfTradePrevention(selfTradePrevention string) *TestNewOrder {
+// 	s.selfTradePrevention = &selfTradePrevention
+// 	return s
+// }
 
-// Send the request
-func (s *TestNewOrder) Do(ctx context.Context, opts ...RequestOption) (res *AccountOrderBookResponse, err error) {
-	r := &request{
-		method:   http.MethodPost,
-		endpoint: "/api/v3/order/test",
-		secType:  secTypeNone,
-	}
-	r.setParam("symbol", s.symbol)
-	r.setParam("side", s.side)
-	r.setParam("type", s.orderType)
-	if s.timeInForce != nil {
-		r.setParam("timeInForce", *s.timeInForce)
-	}
-	if s.quantity != nil {
-		r.setParam("quantity", strconv.FormatFloat(*s.quantity, 'f', -1, 64))
-	}
-	if s.quoteOrderQty != nil {
-		r.setParam("quoteOrderQty", *s.quoteOrderQty)
-	}
-	if s.price != nil {
-		r.setParam("price", *s.price)
-	}
-	if s.newClientOrderId != nil {
-		r.setParam("newClientOrderId", *s.newClientOrderId)
-	}
-	if s.strategyId != nil {
-		r.setParam("strategyId", *s.strategyId)
-	}
-	if s.strategyType != nil {
-		r.setParam("strategyType", *s.strategyType)
-	}
-	if s.stopPrice != nil {
-		r.setParam("stopPrice", *s.stopPrice)
-	}
-	if s.trailingDelta != nil {
-		r.setParam("trailingDelta", *s.trailingDelta)
-	}
-	if s.icebergQty != nil {
-		r.setParam("icebergQty", *s.icebergQty)
-	}
-	if s.newOrderRespType != nil {
-		r.setParam("newOrderRespType", *s.newOrderRespType)
-	}
-	if s.selfTradePrevention != nil {
-		r.setParam("selfTradePreventionMode", *s.selfTradePrevention)
-	}
-	data, err := s.c.callAPI(ctx, r, opts...)
-	if err != nil {
-		return nil, err
-	}
-	res = new(AccountOrderBookResponse)
-	err = json.Unmarshal(data, res)
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
-}
+// // Send the request
+// func (s *TestNewOrder) Do(ctx context.Context, opts ...RequestOption) (res *AccountOrderBookResponse, err error) {
+// 	r := &request{
+// 		method:   http.MethodPost,
+// 		endpoint: "/api/v3/order/test",
+// 		secType:  secTypeNone,
+// 	}
+// 	r.setParam("symbol", s.symbol)
+// 	r.setParam("side", s.side)
+// 	r.setParam("type", s.orderType)
+// 	if s.timeInForce != nil {
+// 		r.setParam("timeInForce", *s.timeInForce)
+// 	}
+// 	if s.quantity != nil {
+// 		r.setParam("quantity", strconv.FormatFloat(*s.quantity, 'f', -1, 64))
+// 	}
+// 	if s.quoteOrderQty != nil {
+// 		r.setParam("quoteOrderQty", *s.quoteOrderQty)
+// 	}
+// 	if s.price != nil {
+// 		r.setParam("price", *s.price)
+// 	}
+// 	if s.newClientOrderId != nil {
+// 		r.setParam("newClientOrderId", *s.newClientOrderId)
+// 	}
+// 	if s.strategyId != nil {
+// 		r.setParam("strategyId", *s.strategyId)
+// 	}
+// 	if s.strategyType != nil {
+// 		r.setParam("strategyType", *s.strategyType)
+// 	}
+// 	if s.stopPrice != nil {
+// 		r.setParam("stopPrice", *s.stopPrice)
+// 	}
+// 	if s.trailingDelta != nil {
+// 		r.setParam("trailingDelta", *s.trailingDelta)
+// 	}
+// 	if s.icebergQty != nil {
+// 		r.setParam("icebergQty", *s.icebergQty)
+// 	}
+// 	if s.newOrderRespType != nil {
+// 		r.setParam("newOrderRespType", *s.newOrderRespType)
+// 	}
+// 	if s.selfTradePrevention != nil {
+// 		r.setParam("selfTradePreventionMode", *s.selfTradePrevention)
+// 	}
+// 	data, err := s.c.callAPI(ctx, r, opts...)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	res = new(AccountOrderBookResponse)
+// 	err = json.Unmarshal(data, res)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return res, nil
+// }
 
-// Create AccountOrderBookResponse
-type AccountOrderBookResponse struct {
-}
+//// Create AccountOrderBookResponse
+// type AccountOrderBookResponse struct {
+// }
 
-// Binance New Order endpoint (POST /api/v3/order)
+// Binance New Order endpoint (POST /fapi/v1/order)
+//
 // CreateOrderService create order
 type CreateOrderService struct {
-	c                       *Client
-	symbol                  string
-	side                    string
-	orderType               string
-	timeInForce             *string
-	quantity                *float64
-	quoteOrderQty           *float64
-	price                   *float64
-	newClientOrderId        *string
-	strategyId              *int
-	strategyType            *int
-	stopPrice               *float64
-	trailingDelta           *int
-	icebergQty              *float64
-	newOrderRespType        *string
-	selfTradePreventionMode *string
+	c                *Client
+	symbol           string
+	side             string
+	positionSide     *string
+	orderType        string
+	timeInForce      *string
+	quantity         *float64
+	reduceOnly       *string
+	price            *float64
+	newClientOrderID *string
+	stopPrice        *float64
+	closePosition    *string
+	activationPrice  *float64
+	callbackRate     *float64
+	workingType      *string
+	priceProtect     *string
+	newOrderRespType *string
 }
 
 // Symbol set symbol
@@ -212,9 +214,15 @@ func (s *CreateOrderService) Side(side string) *CreateOrderService {
 	return s
 }
 
+// Type set positionSide
+func (s *CreateOrderService) PositionSide(positionSide string) *CreateOrderService {
+	s.positionSide = &positionSide
+	return s
+}
+
 // Type set type
 func (s *CreateOrderService) Type(orderType string) *CreateOrderService {
-	s.orderType = orderType
+	s.positionSide = &orderType
 	return s
 }
 
@@ -230,9 +238,9 @@ func (s *CreateOrderService) Quantity(quantity float64) *CreateOrderService {
 	return s
 }
 
-// QuoteOrderQty set quoteOrderQty
-func (s *CreateOrderService) QuoteOrderQty(quoteOrderQty float64) *CreateOrderService {
-	s.quoteOrderQty = &quoteOrderQty
+// ReduceOnly set reduceOnly
+func (s *CreateOrderService) ReduceOnly(ReduceOnly string) *CreateOrderService {
+	s.reduceOnly = &ReduceOnly
 	return s
 }
 
@@ -244,19 +252,7 @@ func (s *CreateOrderService) Price(price float64) *CreateOrderService {
 
 // NewClientOrderId set newClientOrderId
 func (s *CreateOrderService) NewClientOrderId(newClientOrderId string) *CreateOrderService {
-	s.newClientOrderId = &newClientOrderId
-	return s
-}
-
-// StrategyId set strategyId
-func (s *CreateOrderService) StrategyId(strategyId int) *CreateOrderService {
-	s.strategyId = &strategyId
-	return s
-}
-
-// StrategyType set strategyType
-func (s *CreateOrderService) StrategyType(strategyType int) *CreateOrderService {
-	s.strategyType = &strategyType
+	s.newClientOrderID = &newClientOrderId
 	return s
 }
 
@@ -266,27 +262,39 @@ func (s *CreateOrderService) StopPrice(stopPrice float64) *CreateOrderService {
 	return s
 }
 
-// TrailingDelta set trailingDelta
-func (s *CreateOrderService) TrailingDelta(trailingDelta int) *CreateOrderService {
-	s.trailingDelta = &trailingDelta
+// ClosePosition set closePosition
+func (s *CreateOrderService) ClosePosition(closePosition string) *CreateOrderService {
+	s.closePosition = &closePosition
+	return s
+}
+
+// ActivationPrice set activationPrice
+func (s *CreateOrderService) ActivationPrice(activationPrice float64) *CreateOrderService {
+	s.activationPrice = &activationPrice
+	return s
+}
+
+// CallbackRate set callbackRate
+func (s *CreateOrderService) CallbackRate(callbackRate float64) *CreateOrderService {
+	s.callbackRate = &callbackRate
 	return s
 }
 
 // IcebergQuantity set icebergQuantity
-func (s *CreateOrderService) IcebergQuantity(icebergQty float64) *CreateOrderService {
-	s.icebergQty = &icebergQty
+func (s *CreateOrderService) WorkingType(workingType string) *CreateOrderService {
+	s.workingType = &workingType
+	return s
+}
+
+// PriceProtect set priceProtect
+func (s *CreateOrderService) PriceProtect(priceProtect string) *CreateOrderService {
+	s.priceProtect = &priceProtect
 	return s
 }
 
 // NewOrderRespType set newOrderRespType
 func (s *CreateOrderService) NewOrderRespType(newOrderRespType string) *CreateOrderService {
 	s.newOrderRespType = &newOrderRespType
-	return s
-}
-
-// SelfTradePreventionMode set selfTradePreventionMode
-func (s *CreateOrderService) SelfTradePreventionMode(selfTradePreventionMode string) *CreateOrderService {
-	s.selfTradePreventionMode = &selfTradePreventionMode
 	return s
 }
 
@@ -301,7 +309,7 @@ func (s *CreateOrderService) Do(ctx context.Context, opts ...RequestOption) (res
 	respType := ACK
 	r := &request{
 		method:   http.MethodPost,
-		endpoint: "/api/v3/order",
+		endpoint: "/fapi/v1/order",
 		secType:  secTypeSigned,
 	}
 	r.setParam("symbol", s.symbol)
@@ -313,35 +321,38 @@ func (s *CreateOrderService) Do(ctx context.Context, opts ...RequestOption) (res
 	case "LIMIT":
 		respType = FULL
 	}
+	if s.positionSide != nil {
+		r.setParam("positionSide", *s.positionSide)
+	}
 	if s.timeInForce != nil {
 		r.setParam("timeInForce", *s.timeInForce)
 	}
 	if s.quantity != nil {
 		r.setParam("quantity", strconv.FormatFloat(*s.quantity, 'f', -1, 64))
 	}
-	if s.quoteOrderQty != nil {
-		r.setParam("quoteOrderQty", *s.quoteOrderQty)
+	if s.reduceOnly != nil {
+		r.setParam("reduceOnly", *s.reduceOnly)
 	}
 	if s.price != nil {
 		r.setParam("price", *s.price)
 	}
-	if s.newClientOrderId != nil {
-		r.setParam("newClientOrderId", *s.newClientOrderId)
-	}
-	if s.strategyId != nil {
-		r.setParam("strategyId", *s.strategyId)
-	}
-	if s.strategyType != nil {
-		r.setParam("strategyType", *s.strategyType)
+	if s.newClientOrderID != nil {
+		r.setParam("newClientOrderId", *s.newClientOrderID)
 	}
 	if s.stopPrice != nil {
 		r.setParam("stopPrice", *s.stopPrice)
 	}
-	if s.trailingDelta != nil {
-		r.setParam("trailingDelta", *s.trailingDelta)
+	if s.closePosition != nil {
+		r.setParam("closePosition", *s.closePosition)
 	}
-	if s.icebergQty != nil {
-		r.setParam("icebergQty", *s.icebergQty)
+	if s.activationPrice != nil {
+		r.setParam("activationPrice", *s.activationPrice)
+	}
+	if s.callbackRate != nil {
+		r.setParam("callbackRate", *s.callbackRate)
+	}
+	if s.workingType != nil {
+		r.setParam("workingType", *s.workingType)
 	}
 	if s.newOrderRespType != nil {
 		r.setParam("newOrderRespType", *s.newOrderRespType)
@@ -350,13 +361,7 @@ func (s *CreateOrderService) Do(ctx context.Context, opts ...RequestOption) (res
 			respType = ACK
 		case "RESULT":
 			respType = RESULT
-		case "FULL":
-			respType = FULL
 		}
-
-	}
-	if s.selfTradePreventionMode != nil {
-		r.setParam("selfTradePreventionMode", *s.selfTradePreventionMode)
 	}
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
