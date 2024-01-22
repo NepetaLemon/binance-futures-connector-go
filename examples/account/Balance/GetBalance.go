@@ -18,13 +18,11 @@ func NewOrder() {
 
 	client := binance_futures_connector.NewClient(apiKey, secretKey, baseURL)
 
-	// Binance New Order endpoint - POST /fapi/v1/order
-	newOrder, err := client.NewCreateOrderService().Symbol("BTCUSDT").Side("BUY").PositionSide("LONG").Type("MARKET").
-		TimeInForce("GTC").Quantity(300).Price(39500).ClosePosition("false").WorkingType("MARK_PRICE").
-		Do(context.Background())
+	// Binance New Order endpoint - POST /fapi/v2/balance
+	balance, err := client.NewBalanceService().Do(context.Background())
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(binance_futures_connector.PrettyPrint(newOrder))
+	fmt.Println(binance_futures_connector.PrettyPrint(balance))
 }

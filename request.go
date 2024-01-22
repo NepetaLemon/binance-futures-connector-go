@@ -15,7 +15,7 @@ const (
 	secTypeSigned // if the 'timestamp' parameter is required
 )
 
-type params map[string]interface{}
+// type params map[string]interface{}
 
 // request define an API request
 type request struct {
@@ -30,29 +30,12 @@ type request struct {
 	fullURL    string
 }
 
-// addParam add param with key/value to query string
-func (r *request) addParam(key string, value interface{}) *request {
-	if r.query == nil {
-		r.query = url.Values{}
-	}
-	r.query.Add(key, fmt.Sprintf("%v", value))
-	return r
-}
-
 // setParam set param with key/value to query string
 func (r *request) setParam(key string, value interface{}) *request {
 	if r.query == nil {
 		r.query = url.Values{}
 	}
 	r.query.Set(key, fmt.Sprintf("%v", value))
-	return r
-}
-
-// setParams set params with key/values to query string
-func (r *request) setParams(m params) *request {
-	for k, v := range m {
-		r.setParam(k, v)
-	}
 	return r
 }
 
