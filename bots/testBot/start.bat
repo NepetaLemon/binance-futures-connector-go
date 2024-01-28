@@ -1,0 +1,1 @@
+testBot.exe --name config.xml

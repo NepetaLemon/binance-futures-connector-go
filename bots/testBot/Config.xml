@@ -1,0 +1,15 @@
+<Configurations>
+    <!-- Credentials -->
+   <ApiKey></ApiKey>    
+    <SecretKey></SecretKey>    
+    <BaseURL>https://api.binance.com</BaseURL>
+    <BaseFURL>https://fapi.binance.com</BaseFURL>
+
+    <!-- Bot Running Data -->
+    <PairSymbol>BTCUSDT</PairSymbol>    
+    <Symbol>USDT</Symbol>    
+    <TradeAmount>0.00012</TradeAmount>
+    <ProfitPriceDelta> 0.0005</ProfitPriceDelta>
+       
+    <LogType>0</LogType> <!-- 0 - disable, 1 - minimum, 2 - full -->
+</Configurations>
