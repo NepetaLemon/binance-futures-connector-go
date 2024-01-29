@@ -62,7 +62,9 @@ func StartBot() {
 				lastWalletAmmout = walletAmmount
 			}
 
-			if NewOrderPair(botConfig.PairSymbol, botConfig.TradeAmount, botConfig.ProfitPriceDelta) {
+			var side = "BUY"
+			var positionSide = "BUY"
+			if NewOrderPair(botConfig.PairSymbol, botConfig.TradeAmount, botConfig.ProfitPriceDelta, side, positionSide) {
 				// lastPrice = cPrice
 			}
 		}
@@ -77,13 +79,13 @@ func StartBot() {
 	}
 }
 
-func NewOrderPair(pairSymbol string, quantity, priceDelta float64) bool {
+func NewOrderPair(pairSymbol string, quantity, priceDelta float64, side, positionSide string) bool {
 
 	client := binance_futures_connector.NewClient(apiKey, secretKey, fbaseURL)
 	// Create new order
 
-	newOrder, err := client.NewCreateOrderService().Symbol(pairSymbol).
-		Side("BUY").Type("MARKET").Quantity(quantity).
+	newOrder, err := client.NewCreateOrderService().Symbol(pairSymbol).Side(side).PositionSide(positionSide).Type("LIMIT").
+		Quantity(quantity).TimeInForce("GTC").Price(39200).
 		Do(context.Background())
 	if err != nil {
 		ErrorLogger.Println(err.Error())
