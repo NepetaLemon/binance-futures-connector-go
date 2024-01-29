@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"log"
-	"math"
 	"os"
 	"time"
 
@@ -14,7 +13,7 @@ import (
 
 var apiKey = ""
 var secretKey = ""
-var baseURL = ""
+var fbaseURL = ""
 var lastSaveTime time.Time
 var botConfig BotConfig
 
@@ -30,7 +29,7 @@ func main() {
 		botConfig = readConfig(os.Args[2])
 		apiKey = botConfig.ApiKey
 		secretKey = botConfig.SecretKey
-		baseURL = botConfig.BaseURL
+		fbaseURL = botConfig.BaseFURL
 
 		//GetCurrentOpenOrders()
 		StartBot()
@@ -42,7 +41,7 @@ func main() {
 
 func StartBot() {
 
-	var lastPrice float64 = 0
+	// var lastPrice float64 = 0
 	var lastWalletAmmout float64 = 0
 
 	for {
@@ -53,7 +52,7 @@ func StartBot() {
 			return
 		}
 		if walletAmmount > 0 {
-			cPrice, err := LastPrice(botConfig.PairSymbol)
+			//cPrice, err := LastPrice(botConfig.PairSymbol)
 			if err != nil {
 				ErrorLogger.Println(err.Error())
 				return
@@ -62,12 +61,9 @@ func StartBot() {
 				InfoLogger.Println("Wallet Amount:", walletAmmount)
 				lastWalletAmmout = walletAmmount
 			}
-			if (math.Abs(lastPrice-cPrice) >= math.Abs(lastPrice*botConfig.ProfitPriceDelta-lastPrice)) || (lastPrice == 0) {
-				if cPrice*botConfig.TradeAmount < walletAmmount {
-					if NewOrderPair(botConfig.PairSymbol, botConfig.TradeAmount, botConfig.ProfitPriceDelta) {
-						lastPrice = cPrice
-					}
-				}
+
+			if NewOrderPair(botConfig.PairSymbol, botConfig.TradeAmount, botConfig.ProfitPriceDelta) {
+				// lastPrice = cPrice
 			}
 		}
 		fileInfo, _ := os.Stat(botConfig.FilePath)
@@ -77,13 +73,13 @@ func StartBot() {
 			lastSaveTime = cSavedTime
 		}
 
-		time.Sleep(15 * time.Second)
+		time.Sleep(60 * time.Second)
 	}
 }
 
 func NewOrderPair(pairSymbol string, quantity, priceDelta float64) bool {
 
-	client := binance_futures_connector.NewClient(apiKey, secretKey, baseURL)
+	client := binance_futures_connector.NewClient(apiKey, secretKey, fbaseURL)
 	// Create new order
 
 	newOrder, err := client.NewCreateOrderService().Symbol(pairSymbol).
@@ -140,7 +136,7 @@ func readConfig(filepath string) BotConfig {
 	return config
 }
 func initLogger() {
-	file, err := os.OpenFile("logs.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	file, err := os.OpenFile("flogs.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {
 		log.Fatal(err)
 	}

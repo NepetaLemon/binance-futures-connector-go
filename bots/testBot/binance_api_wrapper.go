@@ -9,7 +9,8 @@ import (
 )
 
 func GetWalletAmount(symbol string) (float64, error) {
-	client := binance_futures_connector.NewClient(apiKey, secretKey, baseURL)
+	var retVal float64 = -1
+	client := binance_futures_connector.NewClient(apiKey, secretKey, fbaseURL)
 	asset, err := client.NewBalanceService().
 		Do(context.Background())
 
@@ -19,11 +20,15 @@ func GetWalletAmount(symbol string) (float64, error) {
 	}
 
 	//fmt.Println(binance_connector.PrettyPrint(asset))
-
-	retVal, err := strconv.ParseFloat(asset[len(asset)-1].Free, 64)
-	if err != nil {
-		ErrorLogger.Println(err.Error())
-		return retVal, err
+	for _, balance := range asset {
+		if balance.Asset == symbol {
+			retVal, err = strconv.ParseFloat(balance.Balance, 64)
+			if err != nil {
+				ErrorLogger.Println(err.Error())
+				return retVal, err
+			}
+			break
+		}
 	}
 
 	//InfoLogger.Println("Wallet Amount:", retVal)
@@ -32,17 +37,17 @@ func GetWalletAmount(symbol string) (float64, error) {
 
 func LastPrice(symbol string) (float64, error) {
 
-	client := binance_futures_connector.NewClient("", "", baseURL)
+	client := binance_futures_connector.NewClient("", "", fbaseURL)
 
 	// AvgPrice
-	lastPrice, err := client.NewTickerService().
+	lastPrice, err := client.NewTickerPriceService().
 		Symbol(symbol).Do(context.Background())
 	if err != nil {
 		ErrorLogger.Println(err.Error())
 		return 0, err
 	}
 
-	fLastPrice, err := strconv.ParseFloat(lastPrice.LastPrice, 64)
+	fLastPrice, err := strconv.ParseFloat(lastPrice.Price, 64)
 	if err != nil {
 		ErrorLogger.Println(err.Error())
 		return 0, err
@@ -58,17 +63,17 @@ func round(f float64, precision int) float64 {
 	return math.Round(f*shift) / shift
 }
 
-func GetCurrentOpenOrders() {
+// func GetCurrentOpenOrders() {
 
-	client := binance_futures_connector.NewClient(apiKey, secretKey, baseURL)
+// 	client := binance_futures_connector.NewClient(apiKey, secretKey, baseURL)
 
-	// Binance Get current open orders - GET /api/v3/openOrders
-	getCurrentOpenOrders, err := client.NewGetOpenOrdersService().Symbol("BTCUSDT").
-		Do(context.Background())
-	if err != nil {
-		ErrorLogger.Println(err.Error())
-		return
-	}
-	//fmt.Println(binance_connector.PrettyPrint(getCurrentOpenOrders))
-	InfoLogger.Println("Orders", getCurrentOpenOrders)
-}
+// 	// Binance Get current open orders - GET /api/v3/openOrders
+// 	getCurrentOpenOrders, err := client.NewGetOpenOrdersService().Symbol("BTCUSDT").
+// 		Do(context.Background())
+// 	if err != nil {
+// 		ErrorLogger.Println(err.Error())
+// 		return
+// 	}
+// 	//fmt.Println(binance_connector.PrettyPrint(getCurrentOpenOrders))
+// 	InfoLogger.Println("Orders", getCurrentOpenOrders)
+// }
