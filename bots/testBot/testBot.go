@@ -63,10 +63,10 @@ func StartBot() {
 			}
 
 			var side = "BUY"
-			var positionSide = "BUY"
-			if NewOrderPair(botConfig.PairSymbol, botConfig.TradeAmount, botConfig.ProfitPriceDelta, side, positionSide) {
-				// lastPrice = cPrice
-			}
+			var positionSide = "LONG"
+			NewOrderPairs(botConfig.PairSymbol, botConfig.TradeAmount, botConfig.ProfitPriceDelta, side, positionSide)
+			// lastPrice = cPrice
+
 		}
 		fileInfo, _ := os.Stat(botConfig.FilePath)
 		cSavedTime := fileInfo.ModTime()
@@ -79,40 +79,40 @@ func StartBot() {
 	}
 }
 
-func NewOrderPair(pairSymbol string, quantity, priceDelta float64, side, positionSide string) bool {
+func NewOrderPairs(pairSymbol string, quantity, priceDelta float64, side, positionSide string) bool {
 
 	client := binance_futures_connector.NewClient(apiKey, secretKey, fbaseURL)
 	// Create new order
 
-	newOrder, err := client.NewCreateOrderService().Symbol(pairSymbol).Side(side).PositionSide(positionSide).Type("LIMIT").
-		Quantity(quantity).TimeInForce("GTC").Price(39200).
+	newOrder, err := client.NewCreateOrderService().Symbol(pairSymbol).Side(side).PositionSide(positionSide).Type("MARKET").
+		Quantity(quantity).
 		Do(context.Background())
 	if err != nil {
 		ErrorLogger.Println(err.Error())
 		return false
 	}
 	s, _ := json.Marshal(newOrder)
-	InfoLogger.Println("New Buy Order:", string(s))
+	InfoLogger.Println("New Open Position:", string(s))
 	//fmt.Println(binance_connector.PrettyPrint(newOrder))
-	cLastPrice, err := LastPrice(pairSymbol)
-	if err != nil {
-		ErrorLogger.Println(err.Error())
-		return false
-	}
+	// cLastPrice, err := LastPrice(pairSymbol)
+	// if err != nil {
+	// 	ErrorLogger.Println(err.Error())
+	// 	return false
+	// }
 
-	sellPrice := round(cLastPrice*priceDelta, 2)
+	// SLPrice := round(cLastPrice/priceDelta, 2)
 
-	newSellOrder, err := client.NewCreateOrderService().Symbol(pairSymbol).
-		Side("SELL").Type("LIMIT").Quantity(quantity).Price(sellPrice).TimeInForce("GTC").
-		Do(context.Background())
+	// newSellOrder, err := client.NewCreateOrderService().Symbol(pairSymbol).
+	// 	Side("SELL").Type("LIMIT").Quantity(quantity).Price(SLPrice).TimeInForce("GTC").
+	// 	Do(context.Background())
 
-	if err != nil {
-		ErrorLogger.Println(err.Error())
-		return false
-	}
-	// fmt.Println(binance_connector.PrettyPrint(newSellOrder))
-	s, _ = json.Marshal(newSellOrder)
-	InfoLogger.Println("New Sell Order:", string(s))
+	// if err != nil {
+	// 	ErrorLogger.Println(err.Error())
+	// 	return false
+	// }
+	// // fmt.Println(binance_connector.PrettyPrint(newSellOrder))
+	// s, _ = json.Marshal(newSellOrder)
+	// InfoLogger.Println("New Stop Lose Order:", string(s))
 	return true
 }
 

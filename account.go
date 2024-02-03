@@ -129,12 +129,11 @@ func (s *CreateOrderService) NewOrderRespType(newOrderRespType string) *CreateOr
 const (
 	ACK    = 1
 	RESULT = 2
-	FULL   = 3
 )
 
 // Do send request
 func (s *CreateOrderService) Do(ctx context.Context, opts ...RequestOption) (res interface{}, err error) {
-	respType := ACK
+	respType := RESULT
 	r := &request{
 		method:   http.MethodPost,
 		endpoint: "/fapi/v1/order",
@@ -145,9 +144,9 @@ func (s *CreateOrderService) Do(ctx context.Context, opts ...RequestOption) (res
 	r.setParam("type", s.orderType)
 	switch s.orderType {
 	case "MARKET":
-		respType = FULL
+		respType = RESULT
 	case "LIMIT":
-		respType = FULL
+		respType = RESULT
 	}
 	if s.positionSide != nil {
 		r.setParam("positionSide", *s.positionSide)
@@ -196,7 +195,7 @@ func (s *CreateOrderService) Do(ctx context.Context, opts ...RequestOption) (res
 		return nil, err
 	}
 	switch respType {
-	case ACK: //case RESULT - NOT HANDLED
+	case RESULT: //case ACK - NOT HANDLED
 		res = new(CreateOrderResponse)
 	}
 	err = json.Unmarshal(data, res)
