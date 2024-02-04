@@ -92,12 +92,15 @@ func OpenPosition(pairSymbol string, quantity, priceDelta float64, side, positio
 		ErrorLogger.Println(err.Error())
 		return false
 	}
-	activationPrice := round(cLastPrice/priceDelta, 2)
-	SLPrice := round(cLastPrice/priceDelta, 2)
+	//activationPrice := round(cLastPrice/priceDelta, 2)
+	SLPrice := round(cLastPrice/(priceDelta+(priceDelta-1)), 2)
 	TPPrice := round(cLastPrice*priceDelta, 2)
 
-	newOrder, err := client.NewCreateOrderService().Symbol(pairSymbol).PositionSide(positionSide).
-		Side("BUY").Type("TRAILING_STOP_MARKET").Quantity(quantity).ActivationPrice(activationPrice).CallbackRate(0.1).
+	// newOrder, err := client.NewCreateOrderService().Symbol(pairSymbol).PositionSide(positionSide).
+	// 	Side("BUY").Type("TRAILING_STOP_MARKET").Quantity(quantity).ActivationPrice(activationPrice).CallbackRate(0.1).
+	// 	Do(context.Background())
+	newOrder, err := client.NewCreateOrderService().Symbol(pairSymbol).Side(side).PositionSide(positionSide).Type("MARKET").
+		Quantity(quantity).
 		Do(context.Background())
 	if err != nil {
 		ErrorLogger.Println(err.Error())
@@ -112,7 +115,7 @@ func OpenPosition(pairSymbol string, quantity, priceDelta float64, side, positio
 	}
 
 	newSellOrder, err := client.NewCreateOrderService().Symbol(pairSymbol).PositionSide(positionSide).
-		Side("SELL").Type("TAKE_PROFIT_MARKET").Quantity(quantity).StopPrice(SLPrice).TimeInForce("GTC").ClosePosition("true").
+		Side("SELL").Type("TAKE_PROFIT_MARKET").Quantity(quantity).StopPrice(TPPrice).
 		Do(context.Background())
 
 	if err != nil {
@@ -123,7 +126,7 @@ func OpenPosition(pairSymbol string, quantity, priceDelta float64, side, positio
 	s, _ = json.Marshal(newSellOrder)
 	InfoLogger.Println("New Stop Lose Order:", string(s))
 	newSellOrder, err = client.NewCreateOrderService().Symbol(pairSymbol).PositionSide(positionSide).
-		Side("SELL").Type("STOP_MARKET").Quantity(quantity).StopPrice(TPPrice).ClosePosition("true").
+		Side("SELL").Type("STOP_MARKET").Quantity(quantity).StopPrice(SLPrice).
 		Do(context.Background())
 
 	if err != nil {
