@@ -64,7 +64,7 @@ func StartBot() {
 
 			var side = "BUY"
 			var positionSide = "LONG"
-			NewOrderPairs(botConfig.PairSymbol, botConfig.TradeAmount, botConfig.ProfitPriceDelta, side, positionSide)
+			OpenPosition(botConfig.PairSymbol, botConfig.TradeAmount, botConfig.ProfitPriceDelta, side, positionSide)
 			// lastPrice = cPrice
 
 		}
@@ -79,13 +79,25 @@ func StartBot() {
 	}
 }
 
-func NewOrderPairs(pairSymbol string, quantity, priceDelta float64, side, positionSide string) bool {
+func OpenPosition(pairSymbol string, quantity, priceDelta float64, side, positionSide string) bool {
 
 	client := binance_futures_connector.NewClient(apiKey, secretKey, fbaseURL)
 	// Create new order
 
-	newOrder, err := client.NewCreateOrderService().Symbol(pairSymbol).Side(side).PositionSide(positionSide).Type("MARKET").
-		Quantity(quantity).
+	// newOrder, err := client.NewCreateOrderService().Symbol(pairSymbol).Side(side).PositionSide(positionSide).Type("MARKET").
+	// 	Quantity(quantity).
+	// 	Do(context.Background())
+	cLastPrice, err := LastPrice(pairSymbol)
+	if err != nil {
+		ErrorLogger.Println(err.Error())
+		return false
+	}
+	activationPrice := round(cLastPrice/priceDelta, 2)
+	SLPrice := round(cLastPrice/priceDelta, 2)
+	TPPrice := round(cLastPrice*priceDelta, 2)
+
+	newOrder, err := client.NewCreateOrderService().Symbol(pairSymbol).PositionSide(positionSide).
+		Side("BUY").Type("TRAILING_STOP_MARKET").Quantity(quantity).ActivationPrice(activationPrice).CallbackRate(0.1).
 		Do(context.Background())
 	if err != nil {
 		ErrorLogger.Println(err.Error())
@@ -94,25 +106,33 @@ func NewOrderPairs(pairSymbol string, quantity, priceDelta float64, side, positi
 	s, _ := json.Marshal(newOrder)
 	InfoLogger.Println("New Open Position:", string(s))
 	//fmt.Println(binance_connector.PrettyPrint(newOrder))
-	// cLastPrice, err := LastPrice(pairSymbol)
-	// if err != nil {
-	// 	ErrorLogger.Println(err.Error())
-	// 	return false
-	// }
+	if err != nil {
+		ErrorLogger.Println(err.Error())
+		return false
+	}
 
-	// SLPrice := round(cLastPrice/priceDelta, 2)
+	newSellOrder, err := client.NewCreateOrderService().Symbol(pairSymbol).PositionSide(positionSide).
+		Side("SELL").Type("TAKE_PROFIT_MARKET").Quantity(quantity).StopPrice(SLPrice).TimeInForce("GTC").ClosePosition("true").
+		Do(context.Background())
 
-	// newSellOrder, err := client.NewCreateOrderService().Symbol(pairSymbol).
-	// 	Side("SELL").Type("LIMIT").Quantity(quantity).Price(SLPrice).TimeInForce("GTC").
-	// 	Do(context.Background())
+	if err != nil {
+		ErrorLogger.Println(err.Error())
+		return false
+	}
+	// fmt.Println(binance_connector.PrettyPrint(newSellOrder))
+	s, _ = json.Marshal(newSellOrder)
+	InfoLogger.Println("New Stop Lose Order:", string(s))
+	newSellOrder, err = client.NewCreateOrderService().Symbol(pairSymbol).PositionSide(positionSide).
+		Side("SELL").Type("STOP_MARKET").Quantity(quantity).StopPrice(TPPrice).ClosePosition("true").
+		Do(context.Background())
 
-	// if err != nil {
-	// 	ErrorLogger.Println(err.Error())
-	// 	return false
-	// }
-	// // fmt.Println(binance_connector.PrettyPrint(newSellOrder))
-	// s, _ = json.Marshal(newSellOrder)
-	// InfoLogger.Println("New Stop Lose Order:", string(s))
+	if err != nil {
+		ErrorLogger.Println(err.Error())
+		return false
+	}
+	// fmt.Println(binance_connector.PrettyPrint(newSellOrder))
+	s, _ = json.Marshal(newSellOrder)
+	InfoLogger.Println("New Take Profit Order:", string(s))
 	return true
 }
 
