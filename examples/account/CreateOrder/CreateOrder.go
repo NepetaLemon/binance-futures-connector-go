@@ -26,5 +26,8 @@ func NewOrder() {
 		fmt.Println(err)
 		return
 	}
+	//  newOrder, err := client.NewCreateOrderService().Symbol(pairSymbol).PositionSide(positionSide).
+	// 	Side("BUY").Type("TRAILING_STOP_MARKET").Quantity(quantity).ActivationPrice(activationPrice).CallbackRate(0.1).
+	// 	Do(context.Background())
 	fmt.Println(binance_futures_connector.PrettyPrint(newOrder))
 }

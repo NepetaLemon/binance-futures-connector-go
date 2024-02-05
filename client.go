@@ -199,3 +199,6 @@ func (c *Client) NewBalanceService() *FuturesAccountBalanceService {
 func (c *Client) NewTickerPriceService() *TickerPrice {
 	return &TickerPrice{c: c}
 }
+func (c *Client) CancelAllOpenOrdersService() *CancelAllOpenOrdersService {
+	return &CancelAllOpenOrdersService{c: c}
+}

@@ -273,3 +273,33 @@ type FuturesAccountBalanceResponse struct {
 	AvailableBalance   string `json:"availableBalance"`
 	MaxWithdrawAmount  string `json:"maxWithdrawAmount"`
 }
+
+// CancelAllOpenOrdersService cancel all open orders
+type CancelAllOpenOrdersService struct {
+	c      *Client
+	symbol string
+}
+
+// Symbol set symbol
+func (s *CancelAllOpenOrdersService) Symbol(symbol string) *CancelAllOpenOrdersService {
+	s.symbol = symbol
+	return s
+}
+
+// Do send request
+func (s *CancelAllOpenOrdersService) Do(ctx context.Context, opts ...RequestOption) (err error) {
+	r := &request{
+		method:   http.MethodDelete,
+		endpoint: "/fapi/v1/allOpenOrders",
+		secType:  secTypeSigned,
+	}
+	r.setParam("symbol", s.symbol)
+	data, err := s.c.callAPI(ctx, r, opts...)
+	if err != nil {
+		return err
+	}
+	if len(data) == 0 {
+		return nil
+	}
+	return nil
+}
