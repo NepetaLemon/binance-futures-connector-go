@@ -8,7 +8,7 @@ import (
 	binance_futures_connector "github.com/binance/binance-futures-connector-go"
 )
 
-func GetWalletAmount(symbol string) (float64, error) {
+func GetAvailableBalance(symbol string) (float64, error) {
 	var retVal float64 = -1
 	client := binance_futures_connector.NewClient(apiKey, secretKey, fbaseURL)
 	asset, err := client.NewBalanceService().
@@ -22,7 +22,7 @@ func GetWalletAmount(symbol string) (float64, error) {
 	//fmt.Println(binance_connector.PrettyPrint(asset))
 	for _, balance := range asset {
 		if balance.Asset == symbol {
-			retVal, err = strconv.ParseFloat(balance.Balance, 64)
+			retVal, err = strconv.ParseFloat(balance.AvailableBalance, 64)
 			if err != nil {
 				ErrorLogger.Println(err.Error())
 				return retVal, err

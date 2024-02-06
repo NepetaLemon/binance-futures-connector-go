@@ -61,10 +61,10 @@ func StartBot() {
 				InfoLogger.Println("Wallet Amount:", walletAmmount)
 				lastWalletAmmout = walletAmmount
 			}
-			if cPrice*botConfig.TradeAmount/15 < walletAmmount {
+			if cPrice*botConfig.TradeAmount/botConfig.Leverage < walletAmmount {
 				var side = "BUY"
 				var positionSide = "LONG"
-				OpenPosition(botConfig.PairSymbol, botConfig.TradeAmount, botConfig.ProfitPriceDelta, side, positionSide)
+				OpenPosition(botConfig.PairSymbol, botConfig.TradeAmount, botConfig.StopLossDelta, botConfig.TakeProfitDelta, side, positionSide)
 				// lastPrice = cPrice
 			}
 
@@ -80,7 +80,7 @@ func StartBot() {
 	}
 }
 
-func OpenPosition(pairSymbol string, quantity, priceDelta float64, side, positionSide string) bool {
+func OpenPosition(pairSymbol string, quantity, StopLossDelta, TakeProfitDelta float64, side, positionSide string) bool {
 
 	client := binance_futures_connector.NewClient(apiKey, secretKey, fbaseURL)
 
@@ -95,8 +95,8 @@ func OpenPosition(pairSymbol string, quantity, priceDelta float64, side, positio
 		return false
 	}
 	//activationPrice := round(cLastPrice/priceDelta, 2)
-	SLPrice := round(cLastPrice/priceDelta, 2)
-	TPPrice := round(cLastPrice*priceDelta, 2)
+	SLPrice := round(cLastPrice/StopLossDelta, 2)
+	TPPrice := round(cLastPrice*TakeProfitDelta, 2)
 
 	// Open new Position
 	newOrder, err := client.NewCreateOrderService().Symbol(pairSymbol).Side(side).PositionSide(positionSide).
