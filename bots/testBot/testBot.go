@@ -43,8 +43,10 @@ func StartBot() {
 
 	// var lastPrice float64 = 0
 	var lastWalletAmmout float64 = 0
+	var waitTime int64 = 15
 
 	for {
+		var quantity = botConfig.TradeAmount
 		walletAmmount, err := GetAvailableBalance("USDT")
 
 		if err != nil {
@@ -61,10 +63,24 @@ func StartBot() {
 				InfoLogger.Println("Wallet Amount:", walletAmmount)
 				lastWalletAmmout = walletAmmount
 			}
-			if cPrice*botConfig.TradeAmount/botConfig.Leverage < walletAmmount {
+			if quantity < 0 {
+				// quantity = walletAmmount / (cPrice * botConfig.Leverage)
+				for inc := 0.0; cPrice*inc/botConfig.Leverage <= walletAmmount; inc = inc + 0.001 {
+					quantity = round(inc, 3)
+				}
+			} else {
+				if cPrice*botConfig.TradeAmount/botConfig.Leverage < walletAmmount {
+					quantity = botConfig.TradeAmount
+				} else {
+					quantity = -1
+				}
+			}
+			if quantity > 0 {
+				waitForCooldown(cPrice)
 				var side = "BUY"
 				var positionSide = "LONG"
-				OpenPosition(botConfig.PairSymbol, botConfig.TradeAmount, botConfig.StopLossDelta, botConfig.TakeProfitDelta, side, positionSide)
+				OpenPosition(botConfig.PairSymbol, quantity, botConfig.StopLossDelta, botConfig.TakeProfitDelta, side, positionSide)
+				waitTime = 60
 				// lastPrice = cPrice
 			}
 
@@ -76,7 +92,21 @@ func StartBot() {
 			lastSaveTime = cSavedTime
 		}
 
-		time.Sleep(60 * time.Second)
+		time.Sleep(time.Duration(waitTime) * time.Second)
+	}
+}
+
+func waitForCooldown(buyPrice float64) {
+	for startTime := time.Now(); time.Since(startTime) < 60*time.Second; {
+		lastPrice, err := LastPrice(botConfig.PairSymbol)
+		if err != nil {
+			ErrorLogger.Println(err.Error())
+			return
+		}
+		if buyPrice > lastPrice+(lastPrice/botConfig.TakeProfitDelta) {
+			return
+		}
+		time.Sleep(time.Duration(10) * time.Second)
 	}
 }
 
