@@ -66,6 +66,7 @@ func StartBot() {
 					quantity = round(inc, 3)
 				}
 				quantity -= 0.001
+				quantity = round(quantity, 3)
 			} else {
 				if cPrice*botConfig.TradeAmount/botConfig.Leverage < walletAmmount {
 					quantity = botConfig.TradeAmount
