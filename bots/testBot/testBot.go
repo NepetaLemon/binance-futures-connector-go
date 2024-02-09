@@ -40,8 +40,6 @@ func main() {
 }
 
 func StartBot() {
-
-	// var lastPrice float64 = 0
 	var lastWalletAmmout float64 = 0
 	var waitTime int64 = 15
 
@@ -64,7 +62,6 @@ func StartBot() {
 				lastWalletAmmout = walletAmmount
 			}
 			if quantity < 0 {
-				// quantity = walletAmmount / (cPrice * botConfig.Leverage)
 				for inc := 0.0; cPrice*inc/botConfig.Leverage <= walletAmmount; inc = inc + 0.001 {
 					quantity = round(inc, 3)
 				}
@@ -81,7 +78,6 @@ func StartBot() {
 				var positionSide = "LONG"
 				OpenPosition(botConfig.PairSymbol, quantity, botConfig.StopLossDelta, botConfig.TakeProfitDelta, side, positionSide)
 				waitTime = 60
-				// lastPrice = cPrice
 			}
 
 		}
@@ -97,16 +93,29 @@ func StartBot() {
 }
 
 func waitForCooldown(buyPrice float64) {
-	for startTime := time.Now(); time.Since(startTime) < 60*time.Second; {
+	var lastRoundPrice float64
+
+	startTime := time.Now()
+	lastRoundTime := time.Now()
+
+	cooldownTimeout := time.Duration(botConfig.CoolDownTimeoutBeforeBuy) * time.Second
+
+	for time.Since(startTime) < cooldownTimeout {
 		lastPrice, err := LastPrice(botConfig.PairSymbol)
 		if err != nil {
 			ErrorLogger.Println(err.Error())
 			return
 		}
-		if buyPrice > lastPrice+(lastPrice/botConfig.TakeProfitDelta) {
+		priceDrop := buyPrice - lastPrice
+		if priceDrop > botConfig.PriceDropBeforeBuy && lastRoundPrice < lastPrice {
 			return
 		}
-		time.Sleep(time.Duration(10) * time.Second)
+		lastRoundPrice = lastPrice
+		if time.Since(lastRoundTime) > 60*time.Second {
+			lastRoundTime = time.Now()
+			buyPrice = lastPrice
+		}
+		time.Sleep(10 * time.Second)
 	}
 }
 

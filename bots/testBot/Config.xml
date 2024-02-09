@@ -1,16 +1,19 @@
 <Configurations>
     <!-- Credentials -->
     <ApiKey></ApiKey>    
-    <SecretKey></SecretKey>    
+    <SecretKey></SecretKey> 
     <BaseURL>https://api.binance.com</BaseURL>
     <BaseFURL>https://fapi.binance.com</BaseFURL>
 
     <!-- Bot Running Data -->
     <PairSymbol>BTCUSDT</PairSymbol>    
     <Symbol>USDT</Symbol>    
-    <TradeAmount>0.007</TradeAmount>
-    <TakeProfitDelta>1.002</TakeProfitDelta>    
-    <StopLossDelta>1.001</StopLossDelta>    
+    <!-- <TradeAmount>0.007</TradeAmount> -->
+    <TradeAmount>-1</TradeAmount>
+    <TakeProfitDelta>1.015</TakeProfitDelta>    
+    <StopLossDelta>1.002</StopLossDelta>    
+    <PriceDropBeforeBuy>25</PriceDropBeforeBuy>    
+    <CoolDownTimeoutBeforeBuy>300</CoolDownTimeoutBeforeBuy>    
     <Leverage>15</Leverage>    
        
     <LogType>0</LogType> <!-- 0 - disable, 1 - minimum, 2 - full -->
