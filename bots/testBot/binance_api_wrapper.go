@@ -5,7 +5,7 @@ import (
 	"math"
 	"strconv"
 
-	binance_futures_connector "github.com/binance/binance-futures-connector-go"
+	binance_futures_connector "github.com/NepetaLemon/binance-futures-connector-go"
 )
 
 func GetAvailableBalance(symbol string) (float64, error) {

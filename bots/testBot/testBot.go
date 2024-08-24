@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	binance_futures_connector "github.com/binance/binance-futures-connector-go"
+	binance_futures_connector "github.com/NepetaLemon/binance-futures-connector-go"
 )
 
 var apiKey = ""

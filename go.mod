@@ -1,4 +1,4 @@
-module github.com/binance/binance-futures-connector-go
+module github.com/NepetaLemon/binance-futures-connector-go
 
 go 1.19
 

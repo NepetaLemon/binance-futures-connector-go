@@ -14,7 +14,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/binance/binance-futures-connector-go/handlers"
+	"github.com/NepetaLemon/binance-futures-connector-go/handlers"
 )
 
 // TimeInForceType define time in force type of order
